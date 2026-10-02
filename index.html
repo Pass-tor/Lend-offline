@@ -1,0 +1,1025 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>GCash Express Send Receipt</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
+
+  :root {
+    --blue: #1B5EE3;
+    --dark-blue: #0A2E73;
+    --text-blue: #173D82;
+    --muted: #9098A5;
+    --pale: #F0F4FF;
+    --line: #E8ECF2;
+    --font: Nunito, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100%;
+    height: 100%;
+  }
+
+  body {
+    background: var(--pale);
+    color: var(--text-blue);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  button, input { font: inherit; }
+  button { -webkit-tap-highlight-color: transparent; }
+
+  .app {
+    min-height: 100dvh;
+    background: var(--pale);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-panel {
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    padding: 16px 16px 12px;
+    flex: none;
+  }
+
+  .brand-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--blue);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+
+  .brand-mark svg { width: 18px; height: 18px; }
+
+  .brand-title {
+    color: var(--dark-blue);
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.25;
+  }
+
+  .brand-subtitle {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.35;
+  }
+
+  .fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0 12px;
+  }
+
+  .field {
+    margin-bottom: 10px;
+    min-width: 0;
+  }
+
+  .field.full { grid-column: 1 / -1; }
+
+  .field label {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .field input {
+    width: 100%;
+    height: 44px;
+    padding: 10px 12px;
+    border: 1.5px solid #D1D9E8;
+    border-radius: 8px;
+    outline: none;
+    background: #fff;
+    color: var(--text-blue);
+    font-size: 16px; /* prevents iOS zoom */
+    font-weight: 600;
+    transition: border-color .15s;
+  }
+
+  .field input::placeholder {
+    color: #A5AFBE;
+    opacity: 1;
+  }
+
+  .field input:focus { border-color: var(--blue); }
+
+  .preview-area {
+    flex: 1;
+    min-height: 0;
+    padding: 14px 12px 20px;
+    background: var(--blue);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .toolbar {
+    width: 100%;
+    max-width: 390px;
+    height: 36px;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: none;
+  }
+
+  .toolbar-label {
+    color: rgba(255,255,255,.7);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  .view-button, .back-button {
+    border: 0;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    font-weight: 800;
+    min-height: 36px;
+  }
+
+  .view-button {
+    padding: 8px 16px;
+    background: #fff;
+    color: var(--blue);
+    font-size: 13px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+
+  .back-button {
+    padding: 8px 14px;
+    background: rgba(255,255,255,.15);
+    color: #fff;
+    font-size: 13px;
+  }
+
+  .view-button svg, .back-button svg {
+    width: 14px;
+    height: 14px;
+    flex: none;
+  }
+
+  .receipt-stage {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 12px;
+  }
+
+  .receipt {
+    width: 100%;
+    max-width: 390px;
+    margin: 0 auto;
+    background: var(--blue);
+    border-radius: 20px;
+    overflow: hidden;
+    font-family: var(--font);
+    color: var(--text-blue);
+  }
+
+  .receipt-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 14px 16px;
+  }
+
+  .receipt-header-title {
+    color: #fff;
+    font-size: 17px;
+    font-weight: 800;
+  }
+
+  .receipt-close-mark {
+    position: absolute;
+    left: 12px;
+    top: 14px;
+    width: 28px;
+    height: 28px;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .receipt-close-mark svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .check-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: -26px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .check-badge {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    background: var(--blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,.18);
+  }
+
+  .check-badge svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .receipt-card {
+    margin: 0 12px;
+    padding: 34px 18px 0;
+    border-radius: 14px 14px 0 0;
+    background: #fff;
+  }
+
+  .recipient-name {
+    margin-bottom: 8px;
+    color: #0057D9;
+    font-size: 19px;
+    font-weight: 900;
+    letter-spacing: .01em;
+    text-align: center;
+    word-break: break-word;
+  }
+
+  .phone-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+
+  .phone-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: #EDF2FF;
+    color: #1546A3;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .03em;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .sent-via {
+    margin-bottom: 16px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .divider {
+    height: 1px;
+    margin: 0 -18px 12px;
+    background: var(--line);
+  }
+
+  .amount-row, .total-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .amount-row {
+    margin-bottom: 12px;
+    color: var(--text-blue);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .amount-value { font-weight: 800; }
+
+  .total-row {
+    margin-bottom: 0;
+    color: var(--text-blue);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .total-value {
+    color: var(--dark-blue);
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: -.02em;
+  }
+
+  .receipt-lower {
+    margin: 12px -18px 0;
+    padding: 12px 18px 16px;
+    background: var(--pale);
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    color: #30486B;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .ref-row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .ref-label {
+    color: #536273;
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  .ref-value {
+    color: #223B68;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .date-value {
+    white-space: nowrap;
+    text-align: right;
+    font-size: 10px;
+  }
+
+  .ad-card {
+    width: 100%;
+    min-height: 80px;
+    margin: 12px 0;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 12px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.04);
+    overflow: hidden;
+    animation: adFadeIn .25s ease-out both;
+  }
+
+  .ad-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,.18);
+    color: #fff;
+    font-size: 22px;
+    font-weight: 900;
+  }
+
+  .ad-info { flex: 1; min-width: 0; }
+
+  .ad-name-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .ad-name {
+    color: var(--dark-blue);
+    font-size: 13px;
+    font-weight: 800;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sponsored {
+    color: rgba(0,0,0,.35);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    flex: none;
+  }
+
+  .ad-tagline {
+    margin-bottom: 4px;
+    color: #536273;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .rating {
+    height: 11px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    color: #9098A5;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .stars {
+    color: #F59E0B;
+    font-size: 10px;
+    letter-spacing: -2px;
+  }
+
+  .ad-action {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: none;
+  }
+
+  .cta {
+    min-width: 48px;
+    padding: 7px 12px;
+    border-radius: 20px;
+    background: var(--blue);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .02em;
+    line-height: 14px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .chevron {
+    width: 12px;
+    height: 12px;
+    color: #9098A5;
+    flex: none;
+  }
+
+  .eco-card {
+    position: relative;
+    margin: 12px 0 0;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #BFF3D5;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(28,203,138,.25);
+  }
+
+  .eco-card:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 9px;
+    border-radius: 10px 0 0 10px;
+    background: #1CCB8A;
+  }
+
+  .eco-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 5px;
+    color: #1B7C4F;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .eco-title svg {
+    width: 18px;
+    height: 18px;
+    flex: none;
+  }
+
+  .eco-unit {
+    color: #2E7E5A;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .eco-copy {
+    margin: 0;
+    color: #2F6E58;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  .zigzag-wrap {
+    height: 12px;
+    margin: 0 12px;
+    margin-top: -1px;
+    line-height: 0;
+  }
+
+  .zigzag-wrap svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .receipt-footer-space { height: 48px; }
+
+  /* Full-screen viewer */
+  .viewer {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    background: rgba(0,0,0,.45);
+    animation: backdropIn .34s ease-out both;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  .viewer.closing { animation: backdropOut .34s ease-in both; }
+
+  .viewer-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    max-height: 100dvh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px 12px 24px;
+    background: var(--blue);
+    display: flex;
+    flex-direction: column;
+    animation: slideUp .34s cubic-bezier(.22,1,.36,1) both;
+  }
+
+  .viewer.closing .viewer-panel {
+    animation: slideDown .34s ease-in both;
+  }
+
+  .viewer-toolbar {
+    width: 100%;
+    max-width: 390px;
+    height: 36px;
+    margin: 0 auto 12px;
+    flex: none;
+    display: flex;
+    align-items: center;
+  }
+
+  .viewer-receipt-stage {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-bottom: 20px;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  @keyframes slideDown {
+    from { transform: translateY(0); }
+    to { transform: translateY(100%); }
+  }
+
+  @keyframes backdropIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes backdropOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  @keyframes adFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *:before, *:after {
+      animation-duration: .001ms !important;
+      transition-duration: .001ms !important;
+    }
+  }
+
+  /* Larger phones / small tablets – restore 2-col form */
+  @media (min-width: 480px) {
+    .form-panel { padding: 20px 20px 16px; }
+    .fields { grid-template-columns: 1fr 1fr; }
+    .field { margin-bottom: 12px; }
+    .receipt-card { margin: 0 14px; padding: 36px 22px 0; }
+    .divider { margin: 0 -22px 14px; }
+    .receipt-lower { margin: 14px -22px 0; padding: 12px 22px 18px; }
+    .zigzag-wrap { margin: 0 14px; margin-top: -1px; }
+  }
+
+  /* Very small screens */
+  @media (max-width: 360px) {
+    .recipient-name { font-size: 17px; }
+    .total-value { font-size: 18px; }
+    .ad-icon { width: 48px; height: 48px; font-size: 18px; }
+    .cta { padding: 6px 10px; font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <section class="form-panel" id="formPanel">
+    <div class="brand-row">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="white">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">GCash Receipt Generator</div>
+        <div class="brand-subtitle" id="syncText">Time syncs automatically</div>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="field full">
+        <label for="name">Recipient Name</label>
+        <input id="name" type="text" placeholder="CHIBEE" autocomplete="off">
+      </div>
+      <div class="field full">
+        <label for="phone">Phone Number</label>
+        <input id="phone" type="text" placeholder="+63 000 000 0000" autocomplete="off" inputmode="tel">
+      </div>
+      <div class="field">
+        <label for="amount">Amount (₱)</label>
+        <input id="amount" type="text" placeholder="0.00" autocomplete="off" inputmode="decimal">
+      </div>
+      <div class="field">
+        <label for="ref1">Ref No. Line 1</label>
+        <input id="ref1" type="text" value="4041 401" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="ref2">Ref No. Line 2</label>
+        <input id="ref2" type="text" value="222597" autocomplete="off">
+      </div>
+    </div>
+  </section>
+
+  <main class="preview-area" id="previewArea">
+    <div class="toolbar">
+      <span class="toolbar-label">Preview</span>
+      <button class="view-button" id="viewButton" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+        View Receipt
+      </button>
+    </div>
+    <div class="receipt-stage" id="previewReceiptStage"></div>
+  </main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var ads = [
+    ['ScanDoc','Scan, sign & share documents','PDF scanner with OCR support','4.8','210K','GET','#7C3AED','▣'],
+    ['FoodPal','Food delivered in 30 mins','Order from 5,000+ restaurants','4.7','1.2M','INSTALL','#EF4444','🍴'],
+    ['RideNow','Book a ride in seconds','Tricycle, car & delivery in one app','4.6','890K','GET','#0D9488','➜'],
+    ['PayBank','Mobile banking made simple','Free transfers, zero maintaining balance','4.9','3.4M','OPEN','#1D4ED8','▥'],
+    ['ShopEasy','Shop millions of products','Free shipping on orders ₱199+','4.7','2.1M','INSTALL','#EA580C','⌂'],
+    ['FlyDeal','Cheapest flights guaranteed','Compare 500+ airlines instantly','4.5','678K','GET','#0284C7','✈'],
+    ['InsureMe','Life & health insurance online','Coverage starts at ₱99/month','4.6','142K','LEARN MORE','#4338CA','◆'],
+    ['GameZone','Play top mobile games','10,000+ free & premium games','4.8','5.6M','INSTALL','#9333EA','✦'],
+    ['StreamFlix','Watch movies & series','HD streaming, no ads, cancel anytime','4.7','4.8M','GET','#DC2626','▶'],
+    ['MelodyFM','100M+ songs at your fingertips','Offline listening, no ads','4.8','7.2M','GET','#16A34A','♫'],
+    ['BillsPay','Pay all bills in one tap','Meralco, PLDT, water & more','4.5','321K','OPEN','#D97706','ϟ'],
+    ['CashReward','Earn cashback on every spend','Up to 10% back on partner stores','4.6','512K','GET','#B45309','%'],
+    ['FreshMart','Groceries in under 60 minutes','Farm-fresh produce, free delivery ₱500+','4.6','289K','INSTALL','#15803D','🛒'],
+    ['SecureVPN','Browse safely & privately','Military-grade encryption, 1-tap connect','4.7','1.1M','GET','#334155','▣'],
+    ['WealthIQ','Track & grow your finances','Budget, bills & net worth in one place','4.8','445K','GET','#1E40AF','▥'],
+    ['GrowthVest','Invest in stocks & crypto','Start with ₱1. No broker fees.','4.7','334K','OPEN','#059669','↗'],
+    ['DealHub','Flash deals every hour','Up to 90% off — today only','4.5','776K','INSTALL','#C2410C','◇'],
+    ['HotelSearch','Best hotel rates guaranteed','1.5M properties in 200+ countries','4.6','998K','GET','#1E3A8A','⌂'],
+    ['LearnPath','Learn any skill online','50,000+ courses with certificate','4.8','1.7M','GET','#6D28D9','▤'],
+    ['TaskMaster','Get more done every day','Tasks, notes & calendar in one','4.7','567K','GET','#3730A3','✓']
+  ];
+
+  var state = {
+    name: '',
+    phone: '',
+    amount: '',
+    ref1: '4041 401',
+    ref2: '222597',
+    now: new Date(),
+    adIndex: Math.floor(Math.random() * ads.length),
+    adKey: 0,
+    viewer: null
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  var esc = function (value) {
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  };
+
+  var pad = function (n) { return String(n).padStart(2, '0'); };
+
+  var dateText = function (d) {
+    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()] +
+      ' ' + pad(d.getDate()) + ', ' + d.getFullYear();
+  };
+
+  var timeText = function (d) {
+    var h = d.getHours(), ap = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return h + ':' + pad(d.getMinutes()) + ' ' + ap;
+  };
+
+  var amountText = function (raw) {
+    var clean = String(raw || '').replace(/[^0-9.]/g, '');
+    var parts = clean.split('.');
+    var integer = (parts[0] || '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return parts.length > 1 ? integer + '.' + parts[1].slice(0, 2) : integer;
+  };
+
+  var phoneText = function (raw) {
+    var value = String(raw || '');
+    if (value === '0') return '+63 ';
+    if (value.indexOf('0') === 0) value = '+63 ' + value.slice(1);
+    var prefix = '+63 ';
+    var digits = (value.indexOf(prefix) === 0 ? value.slice(prefix.length) : value)
+      .replace(/\D/g, '')
+      .slice(0, 10);
+    var pieces = [];
+    if (digits.length) pieces.push(digits.slice(0, 3));
+    if (digits.length > 3) pieces.push(digits.slice(3, 6));
+    if (digits.length > 6) pieces.push(digits.slice(6, 10));
+    return pieces.length ? prefix + pieces.join(' ') : prefix.trim();
+  };
+
+  var zigzag = function (w, depth, teeth, r) {
+    var half = w / (2 * teeth);
+    var diag = Math.sqrt(half * half + depth * depth);
+    var dx = r * half / diag;
+    var dy = r * depth / diag;
+    var p = function (n) { return Number(n.toFixed(2)); };
+    var d = 'M0 0 L' + w + ' 0 L' + w + ' ' + depth;
+    for (var i = 0; i < teeth; i++) {
+      var xt = w - half * (2 * i + 1);
+      var xv = w - half * (2 * i + 2);
+      d += ' L' + p(xt + dx) + ',' + p(dy) +
+           ' Q' + p(xt) + ',0 ' + p(xt - dx) + ',' + p(dy);
+      if (xv <= 0) {
+        d += ' L0,' + depth;
+      } else {
+        d += ' L' + p(xv + dx) + ',' + p(depth - dy) +
+             ' Q' + p(xv) + ',' + depth + ' ' + p(xv - dx) + ',' + p(depth - dy);
+      }
+    }
+    return d + ' Z';
+  };
+
+  var iconMarkup = function (text) {
+    return '<span aria-hidden="true">' + esc(text) + '</span>';
+  };
+
+  var renderAd = function () {
+    var ad = ads[state.adIndex];
+    return '<a class="ad-card" href="#" aria-label="' + esc(ad[0]) + ' sponsored ad" onclick="return false">' +
+      '<div class="ad-icon" style="background:' + ad[6] + '">' + iconMarkup(ad[7]) + '</div>' +
+      '<div class="ad-info">' +
+        '<div class="ad-name-row"><span class="ad-name">' + esc(ad[0]) + '</span><span class="sponsored">· Sponsored</span></div>' +
+        '<div class="ad-tagline">' + esc(ad[1]) + '</div>' +
+        '<div class="rating"><span class="stars">★★★★★</span><span>' + esc(ad[3]) + ' · ' + esc(ad[4]) + '</span></div>' +
+      '</div>' +
+      '<div class="ad-action"><span class="cta">' + esc(ad[5]) + '</span>' +
+        '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
+      '</div></a>';
+  };
+
+  var receiptMarkup = function () {
+    var displayName = state.name || 'CHIBEE';
+    var displayPhone = state.phone || '+63 000 000 0000';
+    var displayAmount = amountText(state.amount) || '0.00';
+    var ref = [state.ref1, state.ref2].filter(Boolean).join(' ') || '0000 000';
+
+    return '<div class="receipt">' +
+      '<div class="receipt-header">' +
+        '<div class="receipt-close-mark">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round">' +
+            '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>' +
+          '</svg>' +
+        '</div>' +
+        '<span class="receipt-header-title">Express Send</span>' +
+      '</div>' +
+      '<div class="check-wrap">' +
+        '<div class="check-badge">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' +
+            '<polyline points="20 6 9 17 4 12"/>' +
+          '</svg>' +
+        '</div>' +
+      '</div>' +
+      '<div class="receipt-card">' +
+        '<div class="recipient-name">' + esc(displayName) + '</div>' +
+        '<div class="phone-row"><div class="phone-pill">' + esc(displayPhone) + '</div></div>' +
+        '<div class="sent-via">Sent via GCash</div>' +
+        '<div class="divider"></div>' +
+        '<div class="amount-row"><span>Amount</span><span class="amount-value">' + esc(displayAmount) + '</span></div>' +
+        '<div class="divider"></div>' +
+        '<div class="total-row"><span>Total Amount Sent</span><span class="total-value">&#8369;' + esc(displayAmount) + '</span></div>' +
+        '<div class="receipt-lower">' +
+          '<div class="meta-row">' +
+            '<div class="ref-row"><span class="ref-label">Ref No.</span><span class="ref-value">' + esc(ref) + '</span></div>' +
+            '<div class="date-value">' + dateText(state.now) + ' ' + timeText(state.now) + '</div>' +
+          '</div>' +
+          renderAd() +
+          '<div class="eco-card">' +
+            '<div class="eco-title">' +
+              '<svg viewBox="0 0 24 24" fill="#1B7C4F"><path d="M17 8C8 10 5.9 16.17 3.82 19.82L5.71 21l1-1.23A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 5.5-8 5.5S16 4.5 17 8z"/></svg>' +
+              '<span>279g <span class="eco-unit">(gCO₂e)</span></span>' +
+            '</div>' +
+            '<p class="eco-copy">By going digital, you reduce your carbon footprint from transportation, paper, and plastic.</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="zigzag-wrap">' +
+        '<svg viewBox="0 0 390 12" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">' +
+          '<path d="' + zigzag(390, 12, 30, 4.5) + '" fill="#F0F4FF"/>' +
+        '</svg>' +
+      '</div>' +
+      '<div class="receipt-footer-space"></div>' +
+    '</div>';
+  };
+
+  var paintReceipt = function (target) {
+    target.innerHTML = receiptMarkup();
+  };
+
+  var updateSync = function () {
+    $('syncText').textContent = 'Time syncs automatically · ' + dateText(state.now) + ' ' + timeText(state.now);
+  };
+
+  var updatePreview = function () {
+    paintReceipt($('previewReceiptStage'));
+  };
+
+  var refresh = function () {
+    updateSync();
+    updatePreview();
+    if (state.viewer) {
+      paintReceipt(state.viewer.querySelector('.viewer-receipt-stage'));
+    }
+  };
+
+  var advanceAd = function () {
+    state.adIndex = (state.adIndex + 1) % ads.length;
+    state.adKey++;
+    refresh();
+  };
+
+  var closeViewer = function () {
+    if (!state.viewer) return;
+    state.viewer.classList.add('closing');
+    window.setTimeout(function () {
+      if (state.viewer) {
+        state.viewer.remove();
+        state.viewer = null;
+      }
+    }, 340);
+  };
+
+  var openViewer = function () {
+    if (state.viewer) return;
+    var viewer = document.createElement('div');
+    viewer.className = 'viewer';
+    viewer.innerHTML =
+      '<div class="viewer-panel">' +
+        '<div class="viewer-toolbar">' +
+          '<button class="back-button" type="button">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+              '<polyline points="15 18 9 12 15 6"/>' +
+            '</svg>Back' +
+          '</button>' +
+        '</div>' +
+        '<div class="viewer-receipt-stage"></div>' +
+      '</div>';
+
+    viewer.addEventListener('click', function (e) {
+      if (e.target === viewer) closeViewer();
+    });
+    viewer.querySelector('.back-button').addEventListener('click', closeViewer);
+
+    document.body.appendChild(viewer);
+    state.viewer = viewer;
+    paintReceipt(viewer.querySelector('.viewer-receipt-stage'));
+  };
+
+  $('name').addEventListener('input', function (e) {
+    state.name = e.target.value.toUpperCase();
+    updatePreview();
+  });
+
+  $('phone').addEventListener('input', function (e) {
+    state.phone = phoneText(e.target.value);
+    e.target.value = state.phone;
+    updatePreview();
+  });
+
+  $('amount').addEventListener('input', function (e) {
+    state.amount = e.target.value;
+    updatePreview();
+  });
+
+  $('amount').addEventListener('blur', function (e) {
+    var n = parseFloat(String(e.target.value).replace(/,/g, ''));
+    if (!isNaN(n)) {
+      state.amount = n.toFixed(2);
+      e.target.value = state.amount;
+      updatePreview();
+    }
+  });
+
+  $('ref1').addEventListener('input', function (e) {
+    state.ref1 = e.target.value;
+    updatePreview();
+  });
+
+  $('ref2').addEventListener('input', function (e) {
+    state.ref2 = e.target.value;
+    updatePreview();
+  });
+
+  $('viewButton').addEventListener('click', openViewer);
+
+  window.setInterval(advanceAd, 3000);
+  window.setInterval(function () {
+    state.now = new Date();
+    updateSync();
+    updatePreview();
+    if (state.viewer) {
+      paintReceipt(state.viewer.querySelector('.viewer-receipt-stage'));
+    }
+  }, 60000);
+
+  refresh();
+}());
+</script>
+</body>
+</html>
