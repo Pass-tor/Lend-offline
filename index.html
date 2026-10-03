@@ -118,7 +118,7 @@
     outline: none;
     background: #fff;
     color: var(--text-blue);
-    font-size: 16px; /* prevents iOS zoom */
+    font-size: 16px;
     font-weight: 600;
     transition: border-color .15s;
   }
@@ -158,7 +158,7 @@
     text-transform: uppercase;
   }
 
-  .view-button, .back-button {
+  .view-button {
     border: 0;
     border-radius: 20px;
     display: flex;
@@ -168,9 +168,6 @@
     cursor: pointer;
     font-weight: 800;
     min-height: 36px;
-  }
-
-  .view-button {
     padding: 8px 16px;
     background: #fff;
     color: var(--blue);
@@ -178,14 +175,7 @@
     box-shadow: 0 2px 8px rgba(0,0,0,.15);
   }
 
-  .back-button {
-    padding: 8px 14px;
-    background: rgba(255,255,255,.15);
-    color: #fff;
-    font-size: 13px;
-  }
-
-  .view-button svg, .back-button svg {
+  .view-button svg {
     width: 14px;
     height: 14px;
     flex: none;
@@ -218,7 +208,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: 14px 16px;
+    padding: 18px 16px;
   }
 
   .receipt-header-title {
@@ -230,7 +220,7 @@
   .receipt-close-mark {
     position: absolute;
     left: 12px;
-    top: 14px;
+    top: 18px;
     width: 28px;
     height: 28px;
     padding: 4px;
@@ -253,8 +243,8 @@
   }
 
   .check-badge {
-    width: 52px;
-    height: 52px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     border: 3px solid #fff;
     background: var(--blue);
@@ -265,21 +255,21 @@
   }
 
   .check-badge svg {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
   }
 
   .receipt-card {
     margin: 0 12px;
-    padding: 34px 18px 0;
+    padding: 40px 18px 0;
     border-radius: 14px 14px 0 0;
     background: #fff;
   }
 
   .recipient-name {
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     color: #0057D9;
-    font-size: 19px;
+    font-size: 20px;
     font-weight: 900;
     letter-spacing: .01em;
     text-align: center;
@@ -290,14 +280,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
   }
 
   .phone-pill {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 5px 14px;
+    padding: 6px 16px;
     border-radius: 20px;
     background: #EDF2FF;
     color: #1546A3;
@@ -309,7 +299,7 @@
   }
 
   .sent-via {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     color: var(--muted);
     font-size: 11px;
     font-weight: 500;
@@ -318,7 +308,7 @@
 
   .divider {
     height: 1px;
-    margin: 0 -18px 12px;
+    margin: 0 -18px 16px;
     background: var(--line);
   }
 
@@ -330,7 +320,7 @@
   }
 
   .amount-row {
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     color: var(--text-blue);
     font-size: 13px;
     font-weight: 600;
@@ -347,14 +337,14 @@
 
   .total-value {
     color: var(--dark-blue);
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 900;
     letter-spacing: -.02em;
   }
 
   .receipt-lower {
-    margin: 12px -18px 0;
-    padding: 12px 18px 16px;
+    margin: 16px -18px 0;
+    padding: 18px 18px 22px;
     background: var(--pale);
   }
 
@@ -366,6 +356,7 @@
     color: #30486B;
     font-size: 11px;
     font-weight: 700;
+    margin-bottom: 16px;
   }
 
   .ref-row {
@@ -394,124 +385,19 @@
     font-size: 10px;
   }
 
-  .ad-card {
+  /* Blank area — pinapalitan ang dating ads */
+  .blank-area {
     width: 100%;
-    min-height: 80px;
-    margin: 12px 0;
-    padding: 10px 12px;
-    border: 0;
-    border-radius: 12px;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    box-shadow: 0 2px 8px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.04);
-    overflow: hidden;
-    animation: adFadeIn .25s ease-out both;
-  }
-
-  .ad-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: none;
-    box-shadow: 0 2px 6px rgba(0,0,0,.18);
-    color: #fff;
-    font-size: 22px;
-    font-weight: 900;
-  }
-
-  .ad-info { flex: 1; min-width: 0; }
-
-  .ad-name-row {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    min-width: 0;
-    margin-bottom: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-
-  .ad-name {
-    color: var(--dark-blue);
-    font-size: 13px;
-    font-weight: 800;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .sponsored {
-    color: rgba(0,0,0,.35);
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: .02em;
-    flex: none;
-  }
-
-  .ad-tagline {
-    margin-bottom: 4px;
-    color: #536273;
-    font-size: 11px;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .rating {
-    height: 11px;
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    color: #9098A5;
-    font-size: 10px;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-
-  .stars {
-    color: #F59E0B;
-    font-size: 10px;
-    letter-spacing: -2px;
-  }
-
-  .ad-action {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    flex: none;
-  }
-
-  .cta {
-    min-width: 48px;
-    padding: 7px 12px;
-    border-radius: 20px;
-    background: var(--blue);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: .02em;
-    line-height: 14px;
-    text-align: center;
-    white-space: nowrap;
-  }
-
-  .chevron {
-    width: 12px;
-    height: 12px;
-    color: #9098A5;
-    flex: none;
+    height: 92px;
+    margin: 0 0 16px;
+    background: transparent;
+    pointer-events: none;
   }
 
   .eco-card {
     position: relative;
-    margin: 12px 0 0;
-    padding: 12px 14px;
+    margin: 0;
+    padding: 14px 16px;
     border-radius: 10px;
     background: #BFF3D5;
     overflow: hidden;
@@ -533,7 +419,7 @@
     display: flex;
     align-items: center;
     gap: 7px;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
     color: #1B7C4F;
     font-size: 12px;
     font-weight: 800;
@@ -556,7 +442,7 @@
     color: #2F6E58;
     font-size: 11px;
     font-weight: 500;
-    line-height: 1.5;
+    line-height: 1.55;
   }
 
   .zigzag-wrap {
@@ -572,7 +458,7 @@
     height: 100%;
   }
 
-  .receipt-footer-space { height: 48px; }
+  .receipt-footer-space { height: 60px; }
 
   /* Full-screen viewer */
   .viewer {
@@ -646,11 +532,6 @@
     to { opacity: 0; }
   }
 
-  @keyframes adFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     *, *:before, *:after {
       animation-duration: .001ms !important;
@@ -658,23 +539,24 @@
     }
   }
 
-  /* Larger phones / small tablets – restore 2-col form */
+  /* Larger phones / small tablets */
   @media (min-width: 480px) {
     .form-panel { padding: 20px 20px 16px; }
     .fields { grid-template-columns: 1fr 1fr; }
     .field { margin-bottom: 12px; }
-    .receipt-card { margin: 0 14px; padding: 36px 22px 0; }
-    .divider { margin: 0 -22px 14px; }
-    .receipt-lower { margin: 14px -22px 0; padding: 12px 22px 18px; }
+    .receipt-card { margin: 0 14px; padding: 42px 22px 0; }
+    .divider { margin: 0 -22px 18px; }
+    .receipt-lower { margin: 18px -22px 0; padding: 20px 22px 24px; }
     .zigzag-wrap { margin: 0 14px; margin-top: -1px; }
   }
 
   /* Very small screens */
   @media (max-width: 360px) {
-    .recipient-name { font-size: 17px; }
-    .total-value { font-size: 18px; }
-    .ad-icon { width: 48px; height: 48px; font-size: 18px; }
-    .cta { padding: 6px 10px; font-size: 10px; }
+    .recipient-name { font-size: 18px; }
+    .total-value { font-size: 20px; }
+    .receipt-card { padding: 36px 16px 0; }
+    .receipt-lower { padding: 16px 16px 20px; }
+    .blank-area { height: 76px; }
   }
 </style>
 </head>
@@ -736,29 +618,6 @@
 (function () {
   'use strict';
 
-  var ads = [
-    ['ScanDoc','Scan, sign & share documents','PDF scanner with OCR support','4.8','210K','GET','#7C3AED','▣'],
-    ['FoodPal','Food delivered in 30 mins','Order from 5,000+ restaurants','4.7','1.2M','INSTALL','#EF4444','🍴'],
-    ['RideNow','Book a ride in seconds','Tricycle, car & delivery in one app','4.6','890K','GET','#0D9488','➜'],
-    ['PayBank','Mobile banking made simple','Free transfers, zero maintaining balance','4.9','3.4M','OPEN','#1D4ED8','▥'],
-    ['ShopEasy','Shop millions of products','Free shipping on orders ₱199+','4.7','2.1M','INSTALL','#EA580C','⌂'],
-    ['FlyDeal','Cheapest flights guaranteed','Compare 500+ airlines instantly','4.5','678K','GET','#0284C7','✈'],
-    ['InsureMe','Life & health insurance online','Coverage starts at ₱99/month','4.6','142K','LEARN MORE','#4338CA','◆'],
-    ['GameZone','Play top mobile games','10,000+ free & premium games','4.8','5.6M','INSTALL','#9333EA','✦'],
-    ['StreamFlix','Watch movies & series','HD streaming, no ads, cancel anytime','4.7','4.8M','GET','#DC2626','▶'],
-    ['MelodyFM','100M+ songs at your fingertips','Offline listening, no ads','4.8','7.2M','GET','#16A34A','♫'],
-    ['BillsPay','Pay all bills in one tap','Meralco, PLDT, water & more','4.5','321K','OPEN','#D97706','ϟ'],
-    ['CashReward','Earn cashback on every spend','Up to 10% back on partner stores','4.6','512K','GET','#B45309','%'],
-    ['FreshMart','Groceries in under 60 minutes','Farm-fresh produce, free delivery ₱500+','4.6','289K','INSTALL','#15803D','🛒'],
-    ['SecureVPN','Browse safely & privately','Military-grade encryption, 1-tap connect','4.7','1.1M','GET','#334155','▣'],
-    ['WealthIQ','Track & grow your finances','Budget, bills & net worth in one place','4.8','445K','GET','#1E40AF','▥'],
-    ['GrowthVest','Invest in stocks & crypto','Start with ₱1. No broker fees.','4.7','334K','OPEN','#059669','↗'],
-    ['DealHub','Flash deals every hour','Up to 90% off — today only','4.5','776K','INSTALL','#C2410C','◇'],
-    ['HotelSearch','Best hotel rates guaranteed','1.5M properties in 200+ countries','4.6','998K','GET','#1E3A8A','⌂'],
-    ['LearnPath','Learn any skill online','50,000+ courses with certificate','4.8','1.7M','GET','#6D28D9','▤'],
-    ['TaskMaster','Get more done every day','Tasks, notes & calendar in one','4.7','567K','GET','#3730A3','✓']
-  ];
-
   var state = {
     name: '',
     phone: '',
@@ -766,8 +625,6 @@
     ref1: '4041 401',
     ref2: '222597',
     now: new Date(),
-    adIndex: Math.floor(Math.random() * ads.length),
-    adKey: 0,
     viewer: null
   };
 
@@ -836,24 +693,6 @@
     return d + ' Z';
   };
 
-  var iconMarkup = function (text) {
-    return '<span aria-hidden="true">' + esc(text) + '</span>';
-  };
-
-  var renderAd = function () {
-    var ad = ads[state.adIndex];
-    return '<a class="ad-card" href="#" aria-label="' + esc(ad[0]) + ' sponsored ad" onclick="return false">' +
-      '<div class="ad-icon" style="background:' + ad[6] + '">' + iconMarkup(ad[7]) + '</div>' +
-      '<div class="ad-info">' +
-        '<div class="ad-name-row"><span class="ad-name">' + esc(ad[0]) + '</span><span class="sponsored">· Sponsored</span></div>' +
-        '<div class="ad-tagline">' + esc(ad[1]) + '</div>' +
-        '<div class="rating"><span class="stars">★★★★★</span><span>' + esc(ad[3]) + ' · ' + esc(ad[4]) + '</span></div>' +
-      '</div>' +
-      '<div class="ad-action"><span class="cta">' + esc(ad[5]) + '</span>' +
-        '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
-      '</div></a>';
-  };
-
   var receiptMarkup = function () {
     var displayName = state.name || 'CHIBEE';
     var displayPhone = state.phone || '+63 000 000 0000';
@@ -889,7 +728,7 @@
             '<div class="ref-row"><span class="ref-label">Ref No.</span><span class="ref-value">' + esc(ref) + '</span></div>' +
             '<div class="date-value">' + dateText(state.now) + ' ' + timeText(state.now) + '</div>' +
           '</div>' +
-          renderAd() +
+          '<div class="blank-area"></div>' +
           '<div class="eco-card">' +
             '<div class="eco-title">' +
               '<svg viewBox="0 0 24 24" fill="#1B7C4F"><path d="M17 8C8 10 5.9 16.17 3.82 19.82L5.71 21l1-1.23A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 5.5-8 5.5S16 4.5 17 8z"/></svg>' +
@@ -928,12 +767,6 @@
     }
   };
 
-  var advanceAd = function () {
-    state.adIndex = (state.adIndex + 1) % ads.length;
-    state.adKey++;
-    refresh();
-  };
-
   var closeViewer = function () {
     if (!state.viewer) return;
     state.viewer.classList.add('closing');
@@ -951,20 +784,13 @@
     viewer.className = 'viewer';
     viewer.innerHTML =
       '<div class="viewer-panel">' +
-        '<div class="viewer-toolbar">' +
-          '<button class="back-button" type="button">' +
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
-              '<polyline points="15 18 9 12 15 6"/>' +
-            '</svg>Back' +
-          '</button>' +
-        '</div>' +
+        '<div class="viewer-toolbar"></div>' +
         '<div class="viewer-receipt-stage"></div>' +
       '</div>';
 
     viewer.addEventListener('click', function (e) {
       if (e.target === viewer) closeViewer();
     });
-    viewer.querySelector('.back-button').addEventListener('click', closeViewer);
 
     document.body.appendChild(viewer);
     state.viewer = viewer;
@@ -1008,7 +834,6 @@
 
   $('viewButton').addEventListener('click', openViewer);
 
-  window.setInterval(advanceAd, 20000);
   window.setInterval(function () {
     state.now = new Date();
     updateSync();
